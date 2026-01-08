@@ -1,3 +1,4 @@
+import { Table, Button, Column } from '../design';
 import { Expense } from '../types';
 
 interface ExpenseTableProps {
@@ -6,39 +7,31 @@ interface ExpenseTableProps {
 }
 
 export function ExpenseTable({ expenses, onDelete }: ExpenseTableProps) {
-  if (expenses.length === 0) {
-    return <p className="no-expenses">No expenses yet. Add one above!</p>;
-  }
+  const columns: Column<Expense>[] = [
+    { key: 'title', header: 'Title' },
+    {
+      key: 'amount',
+      header: 'Amount',
+      render: (expense) => `$${parseFloat(expense.amount).toFixed(2)}`,
+    },
+    { key: 'date', header: 'Date' },
+    {
+      key: 'actions',
+      header: 'Actions',
+      render: (expense) => (
+        <Button variant="danger" onClick={() => onDelete(expense.id)}>
+          Delete
+        </Button>
+      ),
+    },
+  ];
 
   return (
-    <div className="table-container">
-      <table className="expense-table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((expense) => (
-            <tr key={expense.id}>
-              <td>{expense.title}</td>
-              <td>${parseFloat(expense.amount).toFixed(2)}</td>
-              <td>{expense.date}</td>
-              <td>
-                <button
-                  className="delete-btn"
-                  onClick={() => onDelete(expense.id)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table
+      columns={columns}
+      data={expenses}
+      keyField="id"
+      emptyMessage="No expenses yet. Add one above!"
+    />
   );
 }

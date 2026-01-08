@@ -1,9 +1,29 @@
 import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { ExpenseForm } from './components/ExpenseForm';
 import { ExpenseTable } from './components/ExpenseTable';
+import { getExpenses, createExpense, deleteExpense } from './api';
+import { tokens } from './design';
 import { Expense, ExpenseInput } from './types';
 
-const API_URL = 'http://localhost:8000/api/expenses/';
+const AppContainer = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: ${tokens.spacing.xxl};
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  margin-bottom: ${tokens.spacing.xxl};
+`;
+
+const ErrorMessage = styled.p`
+  color: ${tokens.colors.error};
+  text-align: center;
+  padding: ${tokens.spacing.lg};
+  background: ${tokens.colors.errorBg};
+  border-radius: ${tokens.border.radius};
+`;
 
 function App() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -12,12 +32,10 @@ function App() {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error('Failed to fetch expenses');
-      const data = await response.json();
+      const data = await getExpenses();
       setExpenses(data);
       setError(null);
-    } catch (err) {
+    } catch {
       setError('Failed to load expenses. Is the backend running?');
     } finally {
       setLoading(false);
@@ -29,35 +47,27 @@ function App() {
   }, []);
 
   const handleAddExpense = async (expense: ExpenseInput) => {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(expense),
-    });
-    if (!response.ok) throw new Error('Failed to add expense');
+    await createExpense(expense);
     await fetchExpenses();
   };
 
   const handleDeleteExpense = async (id: number) => {
-    const response = await fetch(`${API_URL}${id}/`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Failed to delete expense');
+    await deleteExpense(id);
     await fetchExpenses();
   };
 
   return (
-    <div className="app">
-      <h1>Expense Tracker</h1>
+    <AppContainer>
+      <Title>Expense Tracker</Title>
       <ExpenseForm onSubmit={handleAddExpense} />
       {loading ? (
         <p>Loading expenses...</p>
       ) : error ? (
-        <p className="error">{error}</p>
+        <ErrorMessage>{error}</ErrorMessage>
       ) : (
         <ExpenseTable expenses={expenses} onDelete={handleDeleteExpense} />
       )}
-    </div>
+    </AppContainer>
   );
 }
 

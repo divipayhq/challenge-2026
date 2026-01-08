@@ -1,9 +1,19 @@
 import { useState } from 'react';
+import styled from 'styled-components';
+import { Button, Input, Card, tokens } from '../design';
 import { ExpenseInput } from '../types';
 
 interface ExpenseFormProps {
   onSubmit: (expense: ExpenseInput) => Promise<void>;
 }
+
+const FormCard = styled(Card)`
+  margin-bottom: ${tokens.spacing.xxl};
+`;
+
+const FormTitle = styled.h2`
+  margin-bottom: ${tokens.spacing.lg};
+`;
 
 export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
   const [title, setTitle] = useState('');
@@ -27,23 +37,21 @@ export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="expense-form">
-      <h2>Add Expense</h2>
-      <div className="form-group">
-        <label htmlFor="title">Title</label>
-        <input
+    <FormCard>
+      <form onSubmit={handleSubmit}>
+        <FormTitle>Add Expense</FormTitle>
+        <Input
           id="title"
+          label="Title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Expense title"
           required
         />
-      </div>
-      <div className="form-group">
-        <label htmlFor="amount">Amount ($)</label>
-        <input
+        <Input
           id="amount"
+          label="Amount ($)"
           type="number"
           step="0.01"
           min="0"
@@ -52,20 +60,18 @@ export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
           placeholder="0.00"
           required
         />
-      </div>
-      <div className="form-group">
-        <label htmlFor="date">Date</label>
-        <input
+        <Input
           id="date"
+          label="Date"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
         />
-      </div>
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Adding...' : 'Add Expense'}
-      </button>
-    </form>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Adding...' : 'Add Expense'}
+        </Button>
+      </form>
+    </FormCard>
   );
 }
