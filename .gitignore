@@ -38,3 +38,4 @@ Thumbs.db
 # Build
 *.egg-info/
 build/
+.claude/
