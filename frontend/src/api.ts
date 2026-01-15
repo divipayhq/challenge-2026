@@ -1,6 +1,6 @@
 import { Expense, ExpenseInput } from './types';
 
-const API_URL = 'http://localhost:8000/api/expenses/';
+const API_URL = 'http://localhost:8001/api/expense/';
 
 export async function getExpenses(): Promise<Expense[]> {
   const response = await fetch(API_URL);

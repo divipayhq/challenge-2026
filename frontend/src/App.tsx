@@ -44,7 +44,7 @@ function App() {
 
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [expenses]);
 
   const handleAddExpense = async (expense: ExpenseInput) => {
     await createExpense(expense);
