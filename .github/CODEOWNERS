@@ -1,10 +1,3 @@
-# Dependency manifests and lockfiles — @divipayhq/weel-engineers can approve Dependabot PRs.
-**/requirements*.txt @divipayhq/weel-engineers
-**/package.json @divipayhq/weel-engineers
-**/package-lock.json @divipayhq/weel-engineers
-**/yarn.lock @divipayhq/weel-engineers
-**/pnpm-lock.yaml @divipayhq/weel-engineers
-**/Pipfile @divipayhq/weel-engineers
-**/Pipfile.lock @divipayhq/weel-engineers
-**/pyproject.toml @divipayhq/weel-engineers
-**/poetry.lock @divipayhq/weel-engineers
+backend/requirements.txt @divipayhq/weel-engineers
+frontend/package.json @divipayhq/weel-engineers
+frontend/package-lock.json @divipayhq/weel-engineers
