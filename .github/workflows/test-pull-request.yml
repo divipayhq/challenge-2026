@@ -1,0 +1,23 @@
+name: Test Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - dev
+      - prod
+      - release/*
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+
+  merge-checks-complete:
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+      - name: merge-checks-complete
+        run: echo 0
